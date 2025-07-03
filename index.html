@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Colour Win</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>Colour Win</h1>
+  </div>
+
+  <div class="game-container">
+    <h2>Choose a Colour</h2>
+    <div class="color-options">
+      <button class="color-btn" onclick="predictColor('green')">Green</button>
+      <button class="color-btn" onclick="predictColor('violet')">Violet</button>
+      <button class="color-btn" onclick="predictColor('red')">Red</button>
+    </div>
+    <p id="result">Result will appear here</p>
+    <button onclick="playGame()">Play</button>
+  </div>
+
+  <div class="wallet-section">
+    <h3>Wallet: $<span id="wallet">0</span></h3>
+    <button onclick="deposit()">Deposit</button>
+    <button onclick="withdraw()">Withdraw</button>
+  </div>
+
+  <div class="footer">
+    <a href="#home">Home</a> | <a href="admin.html" target="_blank">Admin</a>
+  </div>
+
+  <script>
+    let walletBalance = 0;
+
+    function predictColor(color) {
+      document.getElementById('result').innerText = `You chose ${color}. Waiting for result...`;
+    }
+
+    function playGame() {
+      const colors = ['green', 'violet', 'red'];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      const userChoice = document.getElementById('result').innerText.split(' ')[2];
+      if (userChoice === randomColor && walletBalance >= 10) {
+        walletBalance += 20;
+        document.getElementById('result').innerText = `You won! ${randomColor} was the result!`;
+      } else if (walletBalance >= 10) {
+        walletBalance -= 10;
+        document.getElementById('result').innerText = `You lost! ${randomColor} was the result!`;
+      } else {
+        document.getElementById('result').innerText = `Insufficient balance! Deposit first.`;
+      }
+      document.getElementById('wallet').innerText = walletBalance;
+    }
+
+    function deposit() {
+      let amount = prompt("Enter deposit amount:");
+      if (amount && !isNaN(amount) && amount > 0) {
+        alert(`Simulating Razorpay payment of $${amount}.`);
+        walletBalance += parseFloat(amount);
+        document.getElementById('wallet').innerText = walletBalance;
+      } else {
+        alert("Invalid amount!");
+      }
+    }
+
+    function withdraw() {
+      let amount = prompt("Enter withdraw amount:");
+      if (amount && !isNaN(amount) && amount <= walletBalance && amount > 0) {
+        alert(`Simulating Razorpay withdrawal of $${amount}.`);
+        walletBalance -= parseFloat(amount);
+        document.getElementById('wallet').innerText = walletBalance;
+      } else {
+        alert("Invalid amount or insufficient balance!");
+      }
+    }
+  </script>
+</body>
+</html>
